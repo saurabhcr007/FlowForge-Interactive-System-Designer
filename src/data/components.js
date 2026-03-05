@@ -4,6 +4,18 @@
 
 export const componentCategories = [
     {
+        id: 'frontend',
+        label: 'Frontend',
+        icon: '📱',
+        components: [
+            { id: 'web-app', label: 'Web App', icon: '🌐', color: '#38bdf8', type: 'base' },
+            { id: 'mobile-app', label: 'Mobile App', icon: '📱', color: '#a78bfa', type: 'base' },
+            { id: 'tablet-app', label: 'Tablet App', icon: '📲', color: '#818cf8', type: 'base' },
+            { id: 'desktop-app', label: 'Desktop App', icon: '🖥️', color: '#60a5fa', type: 'base' },
+            { id: 'smart-watch', label: 'Smart Watch', icon: '⌚', color: '#34d399', type: 'base' },
+        ],
+    },
+    {
         id: 'traffic',
         label: 'Traffic & Edge',
         icon: '🌐',

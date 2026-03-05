@@ -19,6 +19,15 @@ const BaseNode = memo(({ id, data, selected }) => {
     const currentRPS = nodeSimState?.currentRPS || 0;
     const stressColor = nodeSimState?.stressColor || data.color || '#818cf8';
 
+    const compId = data.componentId || '';
+    const isFrontendNode = ['web-app', 'mobile-app', 'desktop-app', 'tablet-app', 'smart-watch'].includes(compId);
+
+    const isValidConnection = useCallback((connection) => {
+        // Prevent connections TO frontend nodes
+        if (isFrontendNode) return false;
+        return true;
+    }, [isFrontendNode]);
+
     const [pulse, setPulse] = useState(false);
     const prevProcessing = useRef(false);
 
@@ -54,8 +63,12 @@ const BaseNode = memo(({ id, data, selected }) => {
 
     return (
         <>
-            <Handle type="target" position={Position.Top} className="!bg-transparent !border-0 !w-3 !h-3" style={{ background: color, borderColor: color }} />
-            <Handle type="target" position={Position.Left} className="!bg-transparent !border-0 !w-3 !h-3" style={{ background: color, borderColor: color }} />
+            {!isFrontendNode && (
+                <>
+                    <Handle type="target" position={Position.Top} className="!bg-transparent !border-0 !w-3 !h-3" style={{ background: color, borderColor: color }} isValidConnection={isValidConnection} />
+                    <Handle type="target" position={Position.Left} className="!bg-transparent !border-0 !w-3 !h-3" style={{ background: color, borderColor: color }} isValidConnection={isValidConnection} />
+                </>
+            )}
 
             <div
                 onDoubleClick={handleDoubleClick}

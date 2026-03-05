@@ -3,6 +3,11 @@ import { nanoid } from '../store/nanoid';
 const BASE_SPEED_PX_PER_SEC = 180; // pixels per second at 1.0x speed
 
 const NODE_CAPACITIES = {
+    'web-app': 2000,
+    'mobile-app': 1500,
+    'tablet-app': 800,
+    'desktop-app': 500,
+    'smart-watch': 200,
     dns: 500,
     cdn: 1000,
     balancer: 800,
@@ -64,6 +69,9 @@ export const getProcessingDelay = (node) => {
     }
     if (label.includes('kafka') || label.includes('queue') || label.includes('messaging') || label.includes('event')) {
         return 20;
+    }
+    if (label.includes('app') || label.includes('web') || label.includes('mobile') || label.includes('tablet') || label.includes('watch') || label.includes('desktop')) {
+        return 50;
     }
     return 100;
 };
@@ -135,8 +143,18 @@ export class SimulationEngine {
             this.lastSpawn = timestamp;
             let entryNodes = nodes.filter(n => n.data?.isEntryPoint);
             if (entryNodes.length === 0) {
-                const nodesWithIncoming = new Set(edges.map(e => e.target));
-                entryNodes = nodes.filter(n => !nodesWithIncoming.has(n.id));
+                const AUTO_ENTRY_NODE_TYPES = ['web-app', 'mobile-app', 'desktop-app', 'tablet-app', 'smart-watch', 'dns'];
+                entryNodes = nodes.filter(n => {
+                    const label = (n.data?.label || '').toLowerCase();
+                    const compId = n.data?.componentId || '';
+                    return AUTO_ENTRY_NODE_TYPES.some(type => label.includes(type) || compId.includes(type));
+                });
+
+                // Fallback to graph tops if no auto-entry types found
+                if (entryNodes.length === 0) {
+                    const nodesWithIncoming = new Set(edges.map(e => e.target));
+                    entryNodes = nodes.filter(n => !nodesWithIncoming.has(n.id));
+                }
             }
             entryNodes.forEach(en => this.spawnPacket(en, timestamp));
         }
