@@ -87,7 +87,7 @@ export default function Navbar() {
                     <Activity className="w-4 h-4 text-white" />
                 </div>
                 <span className="font-mono font-bold text-sm tracking-wider text-[#e2e8f0]">
-                    VibeArch
+                    FlowForge
                 </span>
             </div>
 
@@ -194,7 +194,7 @@ export default function Navbar() {
 
             {/* Right — GitHub */}
             <a
-                href="https://github.com"
+                href="https://github.com/saurabhcr007/system-designer"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-1.5 rounded-md text-[#94a3b8] hover:text-[#e2e8f0] hover:bg-[#1a1f2e] transition-all"
